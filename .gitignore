@@ -1,0 +1,19 @@
+# Dependencies and local package-manager caches
+node_modules/
+.pnpm-store/
+.cache/
+
+# Generated output
+dist/
+build/
+*.tsbuildinfo
+
+# Local environment files (retain documented examples)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs and operating-system files
+*.log
+.DS_Store
