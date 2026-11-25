@@ -17,6 +17,8 @@ const { settings, home } = await getHomeContent()
   `cache: 'no-store'` and receive a fresh 15-second timeout each time.
 - `getHomeContent()` creates a client and reads published `site-settings` and
   `home-page` Globals in parallel, with relationship depth set to zero.
+- `getAboutContent()` reads published `site-settings` and `about-page` Globals
+  with the same uncached, parallel request pattern.
 - `CMSClient` exports the shared client type for additional content queries.
 
 ## Router integration

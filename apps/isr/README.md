@@ -1,7 +1,8 @@
 # Small Bites — on-demand ISR
 
-The first consumer app renders only the header, hero, and footer from published
-Payload Globals. All UI comes from `@small-bites/ui`; the app has no custom styles.
+The first consumer app renders the homepage header, hero, and footer, and the
+About page from published Payload Globals. Contact us is a placeholder.
+All UI comes from `@small-bites/ui`; the app has no custom styles.
 
 ## Run locally
 
@@ -46,12 +47,17 @@ Payload or connect to its database.
 
 Publish both Globals before building. Required content is validated by Payload;
 the app uses the typed SDK responses directly and lets request errors propagate.
-About and Contact links remain managed by Payload; those pages are not implemented yet.
+The About page reads `site-settings` and `about-page` through `getAboutContent()`.
+Its introduction, text sections, back-link label, metadata description, and timestamp
+labels come from Payload. Creation/update dates come from the About Global; the
+render time is captured inside the page cache boundary, so it changes when the
+cached page regenerates. The existing timestamp component formats dates in
+`Australia/Brisbane`. Contact us remains a placeholder.
 
 ## Cache the rendered page
 
 Cache Components and partial prefetching are enabled. A file-level `'use cache'`
-directive in `page.tsx` caches the homepage output and its CMS-derived metadata.
+directive in each completed page file caches its output and CMS-derived metadata.
 Both exports use `cacheLife('max')`: background revalidation after 30 days and
 expiration after one year, with a five-minute client router stale time. Payload
 publishing invalidates the affected path earlier through `revalidatePath()`.
@@ -109,7 +115,8 @@ Set this in the CMS environment and restart its process:
 ISR_REVALIDATION_URLS=http://localhost:3001/api/revalidate
 ```
 
-Publishing Home page sends `{ "path": "/" }`; publishing Site settings sends
+Publishing Home page sends `{ "path": "/" }`; About page sends
+`{ "path": "/about" }`; publishing Site settings sends
 `{ "path": "all" }` because branding, navigation, and footer content are shared
 across pages. Both use the `revalidateContent(path)` hook factory. Draft-only
 saves do not trigger delivery. Failures are logged without blocking publication; retry the
@@ -124,7 +131,7 @@ To update both deployments, provide both origins:
 ISR_REVALIDATION_URLS=https://YOUR-VERCEL-SITE/api/revalidate,https://YOUR-NETLIFY-SITE.netlify.app/api/revalidate
 ```
 
-Other Globals and recipes do not invalidate this page. Seeding and migrations
+Other Globals and recipes do not invalidate these pages. Seeding and migrations
 remain owned by the CMS; the app never connects directly to PostgreSQL.
 
 ## Hosting
@@ -156,7 +163,8 @@ purge API.
 
 Configure `ISR_REVALIDATION_URLS` in the CMS with this site's
 `https://YOUR-SITE.netlify.app/api/revalidate` endpoint. Publishing Home page
-invalidates only `/`; publishing Site settings sends `"all"` and invalidates
+invalidates only `/`; publishing About page invalidates `/about`; publishing
+Site settings sends `"all"` and invalidates
 all routes under the root layout. Other cached routes remain intact for a
 single-path request.
 

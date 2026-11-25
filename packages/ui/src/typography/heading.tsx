@@ -7,6 +7,7 @@ const headingVariants = cva('font-serif font-normal text-foreground text-balance
     size: {
       hero: 'text-hero text-wrap sm:text-hero-desktop',
       title: 'text-3xl leading-tight sm:text-title',
+      page: 'text-hero text-wrap sm:text-page',
       section: 'text-section',
       card: 'text-xl leading-snug',
     },

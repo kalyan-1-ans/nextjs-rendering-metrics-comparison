@@ -65,13 +65,14 @@ layout; no test runner or testing addons are configured.
 ## ISR app
 
 [`@small-bites/cms-data`](packages/cms-data/README.md) provides the typed Payload
-REST client and shared content queries, including `getHomeContent()`. The package
+REST client and shared content queries, including `getHomeContent()` and
+`getAboutContent()`. The package
 reads `CMS_URL` from the consuming app's environment. App Router and Pages Router
 consumers own their server boundaries and caching strategy. Run `pnpm typecheck:cms-data` to
 check the package.
 
 [`apps/isr`](apps/isr/README.md) is the first consumer, serving the CMS-backed
-header, hero, and footer on <http://localhost:3001>.
+homepage and About page on <http://localhost:3001>. Contact us is a placeholder.
 
 ```sh
 cp -n apps/isr/.env.example apps/isr/.env.local

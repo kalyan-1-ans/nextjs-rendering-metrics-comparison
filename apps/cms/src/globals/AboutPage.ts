@@ -2,6 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 import { globalContentAccess } from '../access/content'
 import { introduction, textFields } from '../fields/copy'
+import { revalidateContent } from '../hooks/revalidate-content'
 
 export const AboutPage: GlobalConfig = {
   slug: 'about-page',
@@ -9,6 +10,7 @@ export const AboutPage: GlobalConfig = {
   admin: { group: 'Pages' },
   access: globalContentAccess,
   versions: { drafts: true },
+  hooks: { afterChange: [revalidateContent('/about')] },
   fields: [
     introduction(),
     {
