@@ -1,7 +1,6 @@
 {
   "name": "small-bites",
   "private": true,
-  "packageManager": "pnpm@10.34.5",
   "scripts": {
     "dev:isr": "pnpm --filter @small-bites/isr dev",
     "build:isr": "pnpm --filter @small-bites/isr build",
@@ -24,11 +23,15 @@
     "cms:generate:importmap": "pnpm --filter @small-bites/cms generate:importmap",
     "cms:migrate": "pnpm --filter @small-bites/cms migrate",
     "cms:migrate:create": "pnpm --filter @small-bites/cms migrate:create",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
     "lint": "oxlint . --no-error-on-unmatched-pattern",
     "lint:fix": "oxlint . --fix --no-error-on-unmatched-pattern"
   },
   "devDependencies": {
+    "oxfmt": "^0.80.0",
     "oxlint": "1.95.0",
     "typescript": "7.0.2"
-  }
+  },
+  "packageManager": "pnpm@10.34.5"
 }

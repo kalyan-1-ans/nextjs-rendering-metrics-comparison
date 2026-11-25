@@ -69,7 +69,8 @@ async function initializeContent(payload: Payload, reset: boolean): Promise<Seed
 
   try {
     const transaction = payload.db.sessions?.[transactionID]?.db as
-      PostgresAdapter['sessions'][string]['db'] | undefined
+      | PostgresAdapter['sessions'][string]['db']
+      | undefined
     if (!transaction) {
       throw new Error('Could not obtain the seed transaction.')
     }
@@ -144,11 +145,16 @@ async function initializeContent(payload: Payload, reset: boolean): Promise<Seed
     })
 
     await commitTransaction(req)
-    payload.logger.info(`Small Bites ${reset ? 'content reset' : 'seed'} completed: two published recipes and five published Globals.`)
+    payload.logger.info(
+      `Small Bites ${reset ? 'content reset' : 'seed'} completed: ${recipes.length} published recipes and ${globalSlugs.length} published Globals.`,
+    )
     return reset ? 'reset' : 'seeded'
   } catch (error) {
     await killTransaction(req)
-    throw new Error(`Small Bites ${reset ? 'content reset' : 'seed'} failed; the content transaction was rolled back. Ensure CMS migrations have been applied.`, { cause: error })
+    throw new Error(
+      `Small Bites ${reset ? 'content reset' : 'seed'} failed; the content transaction was rolled back. Ensure CMS migrations have been applied.`,
+      { cause: error },
+    )
   }
 }
 

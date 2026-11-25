@@ -2,7 +2,7 @@
 
 Independent Payload CMS with PostgreSQL, a Next.js admin interface at `/admin`,
 and a REST API at `/api`. `/` redirects to `/admin`. All CMS users are trusted
-administrators. A fresh content database receives two published recipes and the
+administrators. A fresh content database receives fourteen published recipes and the
 Small Bites page copy from Figma. Consumer applications and visitor-submission
 storage are deferred.
 
@@ -38,14 +38,14 @@ changing the environment file does not change an existing database password.
 
 To register this server in pgAdmin, right-click **Servers → Register → Server**:
 
-| Setting | Value |
-| --- | --- |
-| Name | Small Bites CMS |
-| Host name/address | `127.0.0.1` |
-| Port | `55432` |
-| Maintenance database | `rendering_metrics_cms` |
-| Username | `cms` |
-| Password | The `POSTGRES_PASSWORD` value in `apps/cms/.env` |
+| Setting              | Value                                            |
+| -------------------- | ------------------------------------------------ |
+| Name                 | Small Bites CMS                                  |
+| Host name/address    | `127.0.0.1`                                      |
+| Port                 | `55432`                                          |
+| Maintenance database | `rendering_metrics_cms`                          |
+| Username             | `cms`                                            |
+| Password             | The `POSTGRES_PASSWORD` value in `apps/cms/.env` |
 
 ## Using another PostgreSQL server
 
@@ -73,12 +73,12 @@ cp -n apps/cms/.env.example apps/cms/.env
 
 Set these values in `apps/cms/.env`:
 
-| Variable | Value |
-| --- | --- |
-| `DATABASE_URL` | `postgresql://ROLE:PASSWORD@HOST:PORT/rendering_metrics_cms` |
+| Variable            | Value                                                                               |
+| ------------------- | ----------------------------------------------------------------------------------- |
+| `DATABASE_URL`      | `postgresql://ROLE:PASSWORD@HOST:PORT/rendering_metrics_cms`                        |
 | `POSTGRES_PASSWORD` | Local Docker password; must match `DATABASE_URL` (not needed for a hosted database) |
-| `PAYLOAD_SECRET` | A stable random secret, generated with `openssl rand -hex 32` |
-| `CMS_URL` | `http://localhost:3000` locally; the public HTTPS origin in production |
+| `PAYLOAD_SECRET`    | A stable random secret, generated with `openssl rand -hex 32`                       |
+| `CMS_URL`           | `http://localhost:3000` locally; the public HTTPS origin in production              |
 
 URL-encode special characters in database usernames and passwords. Keep `.env`
 and production secrets out of Git. If initialization already created the local
@@ -192,7 +192,7 @@ pnpm cms:reset-content
 
 This command permanently deletes **all recipes and all five page Globals**, their
 drafts/version history, related content locks and the initial-seed marker. It then
-recreates two published recipes, the five published Globals and a fresh marker
+recreates fourteen published recipes, the five published Globals and a fresh marker
 from the current seed file. IDs and timestamps are regenerated; existing content
 edits and history are discarded.
 
@@ -240,13 +240,13 @@ Consumers query recipes for search, filters, ordering and recommendations.
 
 Each Global is a single document, with explicit fields in named groups:
 
-| Global | Groups / fields |
-| --- | --- |
-| `site-settings` | `branding`, `navigation`, `footer`, `timestamps` |
-| `home-page` | `hero`, `search`, `recommendations`, `mealFilters`, `sorting`, `recipeListing` |
-| `recipe-page` | `navigation`, `metadata`, `sections`, `servings`, `recommendations`, `comments`, `commentForm` |
-| `about-page` | `introduction`, ordered `sections`, `backLinkLabel` |
-| `contact-page` | `introduction`, `form`, `privacyCopy`, `confirmation` |
+| Global          | Groups / fields                                                                                |
+| --------------- | ---------------------------------------------------------------------------------------------- |
+| `site-settings` | `branding`, `navigation`, `footer`, `timestamps`                                               |
+| `home-page`     | `hero`, `search`, `recommendations`, `mealFilters`, `sorting`, `recipeListing`                 |
+| `recipe-page`   | `navigation`, `metadata`, `sections`, `servings`, `recommendations`, `comments`, `commentForm` |
+| `about-page`    | `introduction`, ordered `sections`, `backLinkLabel`                                            |
+| `contact-page`  | `introduction`, `form`, `privacyCopy`, `confirmation`                                          |
 
 Recipe-specific prose belongs in `recipes`; shared section headings such as the
 ingredients heading belong in `recipe-page.sections`. Recipe-page recommendation
@@ -263,10 +263,10 @@ rather than interpreting it as HTML.
 
 `home-page.recommendations` supplies the copy for two selector groups:
 
-| Group | Options | Visitor selection |
-| --- | --- | --- |
-| Diet style | Any, Vegetarian, Vegan, Pescatarian, Non-vegetarian | Choose one |
-| Also free from | Dairy-free, Gluten-free | Choose any |
+| Group          | Options                                             | Visitor selection |
+| -------------- | --------------------------------------------------- | ----------------- |
+| Diet style     | Any, Vegetarian, Vegan, Pescatarian, Non-vegetarian | Choose one        |
+| Also free from | Dairy-free, Gluten-free                             | Choose any        |
 
 The existing API keys are retained: `preferenceLabel` now contains “Diet style” and
 `everythingLabel` contains “Any”. `dietStyleHint`, `freeFromLabel` and `freeFromHint`
@@ -314,15 +314,15 @@ the original first-seed completion marker remains unchanged.
 
 Consumers replace only these named placeholders with calculated values:
 
-| Field | Placeholders |
-| --- | --- |
-| `home-page.recipeListing.countSingularTemplate` / `countPluralTemplate` | `{count}` |
-| `home-page.recipeListing.progressTemplate` | `{shown}`, `{total}` |
-| `home-page.recommendations.filteredRecipesTemplate` | `{preferences}` |
-| `recipe-page.metadata.cookingTimeTemplate` | `{minutes}` |
-| `recipe-page.metadata.servingsTemplate` | `{servings}` |
-| `recipe-page.servings.optionTemplate` | `{servings}` |
-| `recipe-page.comments.countSingularTemplate` / `countPluralTemplate` | `{count}` |
+| Field                                                                   | Placeholders         |
+| ----------------------------------------------------------------------- | -------------------- |
+| `home-page.recipeListing.countSingularTemplate` / `countPluralTemplate` | `{count}`            |
+| `home-page.recipeListing.progressTemplate`                              | `{shown}`, `{total}` |
+| `home-page.recommendations.filteredRecipesTemplate`                     | `{preferences}`      |
+| `recipe-page.metadata.cookingTimeTemplate`                              | `{minutes}`          |
+| `recipe-page.metadata.servingsTemplate`                                 | `{servings}`         |
+| `recipe-page.servings.optionTemplate`                                   | `{servings}`         |
+| `recipe-page.comments.countSingularTemplate` / `countPluralTemplate`    | `{count}`            |
 
 Use the singular template for count `1` and the plural template otherwise. The CMS
 stores the templates, not calculated counts, quantities or rendered timestamps.
@@ -372,7 +372,9 @@ content updates require a manual POST after completion. Draft-only saves do not
 trigger delivery. Publication succeeds even if a consumer
 is offline; failures are logged and can be retried by calling the endpoint with
 the same JSON body.
-Other Globals and recipes do not yet send publish notifications.
+Publishing a recipe sends notifications for `/` and `/recipes/{slug}`, which
+refresh the ISR homepage recipe list and that recipe page. Draft-only saves do
+not trigger delivery.
 
 The consumer caches its generated page, with fresh, uncached CMS reads during
 regeneration. Its endpoint calls `revalidatePath()` for the supplied route, or

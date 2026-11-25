@@ -1,7 +1,8 @@
 # Small Bites — on-demand ISR
 
-The first consumer app renders the homepage header, hero, and footer, and the
-About and Contact pages from published Payload Globals. The Contact form is UI-only.
+The first consumer app renders the homepage recipe search, recommendations, and
+filterable recipe list, plus the About and Contact pages from published Payload
+content. The Contact form is UI-only.
 All UI comes from `@small-bites/ui`; the app has no custom styles.
 
 ## Run locally
@@ -31,8 +32,9 @@ Use `pnpm typecheck:isr` for TypeScript checks. No testing tools are configured.
 
 ## Content
 
-The homepage reads `site-settings` and `home-page` through `getHomeContent()`
-from `@small-bites/cms-data`. The package's `createCMSClient()` creates the
+The homepage reads `site-settings` and `home-page` through `getHomeContent()` and
+all published recipes through `getHomeRecipes()` from
+`@small-bites/cms-data`. The package's `createCMSClient()` creates the
 official `@payloadcms/sdk` REST client, typed with the generated `Config` in
 `@small-bites/cms-types/generated`. Drafts are excluded, and each request has a
 15-second timeout. The shared client reads `process.env.CMS_URL` directly, and
@@ -43,7 +45,14 @@ Payload or connect to its database.
 - Branding and navigation come from `site-settings.branding` and `.navigation`.
 - Hero content comes from `home-page.hero`, preserving authored line breaks.
 - Footer copy comes from `site-settings.footer`.
+- Recipe titles, summaries, meal types, dietary tags, cooking times, and publication dates come from published recipes.
 - Page title and description are also derived from the CMS.
+
+Published recipes render at `/recipes/{slug}` with their introduction,
+recommendation, ingredients, steps, optional tip, and one related recipe. Comments
+and serving-size controls are not part of this page.
+The ten newest published recipe routes are prerendered during the build; other
+published recipe routes render on first request and then use the ISR cache.
 
 Publish Site settings and each page Global before building. Required content is validated by Payload;
 the app uses the typed SDK responses directly and lets request errors propagate.
@@ -158,8 +167,10 @@ To update both deployments, provide both origins:
 ISR_REVALIDATION_URLS=https://YOUR-VERCEL-SITE/api/revalidate,https://YOUR-NETLIFY-SITE.netlify.app/api/revalidate
 ```
 
-Other Globals and recipes do not invalidate these pages. Seeding and migrations
-remain owned by the CMS; the app never connects directly to PostgreSQL.
+Publishing a recipe invalidates `/` and `/recipes/{slug}` so the homepage list
+and that recipe page stay current.
+Seeding and migrations remain owned by the CMS; the app never connects directly
+to PostgreSQL.
 
 ## Hosting
 

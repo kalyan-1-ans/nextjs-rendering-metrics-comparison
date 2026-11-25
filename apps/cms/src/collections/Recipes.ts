@@ -1,6 +1,7 @@
 import type { CollectionConfig, NumberFieldSingleValidation } from 'payload'
 
 import { authenticated, authenticatedOrPublished } from '../access/content'
+import { revalidateCollectionContent } from '../hooks/revalidate-content'
 
 const positiveNumber: NumberFieldSingleValidation = (value) =>
   (typeof value === 'number' && Number.isFinite(value) && value > 0) ||
@@ -27,6 +28,7 @@ export const Recipes: CollectionConfig = {
   versions: { drafts: true },
   defaultSort: '-publishedAt',
   hooks: {
+    afterChange: [revalidateCollectionContent('/')],
     beforeChange: [
       ({ data, originalDoc }) => {
         if (data._status === 'published' && !data.publishedAt && !originalDoc?.publishedAt) {
@@ -53,7 +55,10 @@ export const Recipes: CollectionConfig = {
     {
       name: 'recommendationSummary',
       type: 'textarea',
-      admin: { description: 'Optional shorter blurb for personalized recommendations. Consumers fall back to summary when blank.' },
+      admin: {
+        description:
+          'Optional shorter blurb for personalized recommendations. Consumers fall back to summary when blank.',
+      },
     },
     { name: 'introduction', type: 'textarea', required: true },
     {
@@ -81,9 +86,18 @@ export const Recipes: CollectionConfig = {
         { label: 'Dairy-free', value: 'dairy-free' },
         { label: 'Gluten-free', value: 'gluten-free' },
       ],
-      admin: { description: 'Select all applicable tags. Consumers show one diet style choice and multiple free-from choices; all selected tags must match. Any applies no diet style constraint and is not stored.' },
+      admin: {
+        description:
+          'Select all applicable tags. Consumers show one diet style choice and multiple free-from choices; all selected tags must match. Any applies no diet style constraint and is not stored.',
+      },
     },
-    { name: 'cookingMinutes', type: 'number', required: true, index: true, validate: positiveNumber },
+    {
+      name: 'cookingMinutes',
+      type: 'number',
+      required: true,
+      index: true,
+      validate: positiveNumber,
+    },
     {
       name: 'baseServings',
       type: 'number',
@@ -104,7 +118,10 @@ export const Recipes: CollectionConfig = {
           name: 'quantity',
           type: 'number',
           validate: optionalPositiveNumber,
-          admin: { description: 'Quantity for baseServings. Leave blank for ingredients such as salt to taste.' },
+          admin: {
+            description:
+              'Quantity for baseServings. Leave blank for ingredients such as salt to taste.',
+          },
         },
         { name: 'unit', type: 'text' },
         { name: 'note', type: 'text' },
@@ -123,7 +140,9 @@ export const Recipes: CollectionConfig = {
       name: 'publishedAt',
       type: 'date',
       index: true,
-      admin: { description: 'Set automatically on first publication; can be adjusted by an administrator.' },
+      admin: {
+        description: 'Set automatically on first publication; can be adjusted by an administrator.',
+      },
     },
   ],
 }
