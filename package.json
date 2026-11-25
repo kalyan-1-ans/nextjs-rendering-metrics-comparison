@@ -3,9 +3,13 @@
   "private": true,
   "scripts": {
     "dev:isr": "pnpm --filter @small-bites/isr dev",
+    "dev:pages-router": "pnpm --filter @small-bites/pages-router dev",
+    "dev:ssr": "pnpm --filter @small-bites/ssr dev",
     "build:isr": "pnpm --filter @small-bites/isr build",
     "start:isr": "pnpm --filter @small-bites/isr start",
     "typecheck:isr": "pnpm --filter @small-bites/isr typecheck",
+    "typecheck:pages-router": "pnpm --filter @small-bites/pages-router typecheck",
+    "typecheck:ssr": "pnpm --filter @small-bites/ssr typecheck",
     "typecheck:cms-data": "pnpm --filter @small-bites/cms-data typecheck",
     "storybook": "pnpm --filter @small-bites/ui storybook",
     "build:storybook": "pnpm --filter @small-bites/ui build:storybook",

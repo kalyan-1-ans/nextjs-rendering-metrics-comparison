@@ -97,6 +97,15 @@ select `apps/isr` as the package directory when connecting the repository.
 The app is not deployed by setup.
 Use `pnpm typecheck:isr` for its TypeScript check.
 
+## Rendering comparison scaffolds
+
+[`apps/pages-router`](apps/pages-router/README.md) is a minimal Next.js Pages
+Router app on port 3002. Start it with `pnpm dev:pages-router`.
+
+[`apps/ssr`](apps/ssr/README.md) is a minimal Next.js App Router app configured
+for request-time rendering on port 3003. Start it with `pnpm dev:ssr`.
+Both are setup-only scaffolds without CMS integration or page implementations.
+
 ## CMS
 
 [`apps/cms`](apps/cms/README.md) is a standalone Payload CMS app backed by
