@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Small Bites bowl and sprout</title>
+  <g stroke="#315D48" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 69h80c-2.4 22.8-18.7 39-40 39S26.4 91.8 24 69Z" fill="#315D48" stroke-width="5"/>
+    <path d="M18 65h92" stroke-width="6"/>
+    <path d="M64 57V31" stroke-width="5"/>
+    <path d="M63 44c-12.8-.2-20.4-6.7-21-17 12.8.2 20.4 6.7 21 17Z" fill="#315D48" stroke-width="4"/>
+    <path d="M65 38c.5-12.3 7.4-19.4 17.7-19.5-.5 12.2-7.4 19.3-17.7 19.5Z" fill="#315D48" stroke-width="4"/>
+  </g>
+  <path d="M39 80c3.7 10.4 12 16.9 24.8 19" stroke="#FCFBF8" stroke-linecap="round" stroke-width="4" opacity=".9"/>
+</svg>

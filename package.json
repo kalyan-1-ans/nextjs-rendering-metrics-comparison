@@ -3,6 +3,9 @@
   "private": true,
   "packageManager": "pnpm@10.34.5",
   "scripts": {
+    "storybook": "pnpm --filter @small-bites/ui storybook",
+    "build:storybook": "pnpm --filter @small-bites/ui build:storybook",
+    "typecheck:ui": "pnpm --filter @small-bites/ui typecheck",
     "dev:cms": "pnpm --filter @small-bites/cms dev",
     "build:cms": "pnpm --filter @small-bites/cms build",
     "start:cms": "pnpm --filter @small-bites/cms start",

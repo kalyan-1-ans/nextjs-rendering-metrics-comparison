@@ -11,8 +11,10 @@ references alongside it only when useful.
 - `payload/`: guide future Payload CMS configuration and development.
 - `vercel-react-best-practices/`: guide future React and Next.js performance work.
 - `vercel-composition-patterns/`: guide future React component composition.
+- `tailwind-design-system/`: Tailwind v4 tokens, styling, and component variants;
+  see its `UPSTREAM.md` for provenance and the project's Base UI conventions.
 
-These skills were copied from the adjacent `nextjs-payload-cms-example` repo,
+The original five skills were copied from the adjacent `nextjs-payload-cms-example` repo,
 including their supporting references and rule files. Their source files are
 unchanged. Framework-specific skills are available for future work; copying them
 does not install frameworks or authorize application scaffolding.

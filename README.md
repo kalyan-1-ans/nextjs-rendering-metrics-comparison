@@ -15,13 +15,13 @@ mean it has been installed or configured yet.
 | Area | Tools |
 | --- | --- |
 | Monorepo | pnpm |
-| Framework | Next.js 16, React 19 |
+| Framework | Next.js 16, React 19, Vite |
 | Forms, state, and caching | TanStack Form, TanStack Query (React Query), Zustand, Next.js Cache Components |
 | CMS | Payload CMS |
 | Database | PostgreSQL |
-| UI | Tailwind CSS, shadcn/ui |
+| UI | Tailwind CSS v4, Base UI, shadcn/ui |
 | Coding agents | Cursor, Codex |
-| Skills and MCP | Vercel, Payload |
+| Skills and MCP | Vercel, Payload, Context7 |
 | Linting and formatting | Oxlint, Oxfmt, TypeScript |
 | Demos and metrics | Storybook, Playwright |
 
@@ -38,6 +38,23 @@ pnpm lint
 ```
 
 Use `pnpm lint:fix` to apply automatic lint fixes.
+
+## Shared UI
+
+[`@small-bites/ui`](packages/ui/README.md) contains the Small Bites design
+foundations, components grouped by purpose, shared layout, and original brand assets. It uses Base UI-backed
+shadcn component source and Tailwind CSS v4, with Vite-powered Storybook.
+Future Next.js apps consume the TypeScript source directly without a UI build step.
+
+```sh
+pnpm storybook
+pnpm typecheck:ui
+pnpm build:storybook
+```
+
+Storybook runs at <http://localhost:6006>. Its static build is generated in
+`packages/ui/storybook-static`. Stories document component states and responsive
+layout; no test runner or testing addons are configured.
 
 ## CMS
 

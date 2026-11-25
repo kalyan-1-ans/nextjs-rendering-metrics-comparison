@@ -9,6 +9,7 @@ build/
 *.tsbuildinfo
 .next/
 out/
+storybook-static/
 
 # Local environment files (retain documented examples)
 .env
