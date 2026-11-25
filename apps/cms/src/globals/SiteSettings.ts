@@ -2,6 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 import { globalContentAccess } from '../access/content'
 import { copyGroup, textFields } from '../fields/copy'
+import { revalidateContent } from '../hooks/revalidate-content'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -9,6 +10,7 @@ export const SiteSettings: GlobalConfig = {
   admin: { group: 'Site' },
   access: globalContentAccess,
   versions: { drafts: true },
+  hooks: { afterChange: [revalidateContent('all')] },
   fields: [
     copyGroup('branding', ['siteName']),
     {

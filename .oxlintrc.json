@@ -1,6 +1,18 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y", "import", "promise"],
   "categories": {
     "correctness": "error"
-  }
+  },
+  "rules": {
+    "curly": ["error", "all"],
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["apps/**/*.{js,jsx,ts,tsx,mjs,cjs}"],
+      "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y", "import", "promise", "nextjs"]
+    }
+  ]
 }

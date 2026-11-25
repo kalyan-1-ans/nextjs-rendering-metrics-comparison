@@ -37,8 +37,12 @@ export function SearchInput({
         {...props}
         ref={(node) => {
           inputRef.current = node
-          if (typeof ref === 'function') return ref(node)
-          if (ref) ref.current = node
+          if (typeof ref === 'function') {
+            return ref(node)
+          }
+          if (ref) {
+            ref.current = node
+          }
         }}
         type="search"
         value={value}

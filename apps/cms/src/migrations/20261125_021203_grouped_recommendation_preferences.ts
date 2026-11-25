@@ -30,7 +30,9 @@ function homepageData(page: HomePage) {
 
 async function updateHomepage({ payload, req }: MigrationContext) {
   const existing = await payload.db.findGlobal({ slug: 'home-page', select: { id: true }, req })
-  if (!existing || !('id' in existing)) return
+  if (!existing || !('id' in existing)) {
+    return
+  }
 
   const published = await payload.findGlobal({ slug: 'home-page', draft: false, overrideAccess: true, req })
   const latest = await payload.findGlobal({ slug: 'home-page', draft: true, overrideAccess: true, req })

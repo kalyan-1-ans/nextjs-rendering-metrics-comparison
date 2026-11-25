@@ -84,21 +84,27 @@ Source folders, public import paths, and Storybook use functional categories:
 
 | Category        | Import prefix    | Components                                                                                     |
 | --------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
-| Brand and icons | `brand/`         | `BrandWordmark`, `BrandIcon`, `Icon`                                                           |
+| Brand and icons | `brand/`         | `SiteLogo`, `BrandWordmark`, `BrandIcon`, `Icon`                                               |
 | Typography      | `typography/`    | `Heading`, `Text`                                                                              |
 | Actions         | `actions/`       | `Button`, `IconButton`, `TextLink`                                                             |
 | Forms           | `forms/`         | `Label`, `TextInput`, `SearchInput`, `Select`, `Radio`, `RadioGroup`, `Checkbox`, `ChoiceChip` |
-| Content         | `content/`       | `Card`, `Divider`                                                                              |
+| Content         | `content/`       | `Card`, `Divider`, `HeroBanner`                                                                |
 | Data display    | `data-display/`  | `Tag`, `PageTimestamps`                                                                        |
 | Feedback        | `feedback/`      | `Skeleton`, `Spinner`                                                                          |
 | Accessibility   | `accessibility/` | `SkipLink`, `VisuallyHidden`                                                                   |
-| Shared layout   | `layout/`        | `ContentContainer`, `SiteHeader`, `SiteFooter`                                                 |
+| Shared layout   | `layout/`        | `ContentContainer`, `SiteHeader`, `SiteFooter`, `PageShell`                                    |
 
 For example, import `SearchInput` from `@small-bites/ui/forms/search-input`
 and `PageTimestamps` from `@small-bites/ui/data-display/page-timestamps`.
 The former `atoms/*` entry points and `layout/page-timestamps` have been replaced
 by these category paths. There is no `Atoms` group in Storybook.
 
+- `HeroBanner` receives `eyebrow`, `heading`, and `description`, preserving line breaks.
+  It owns hero spacing and responsive typography; apps supply only the copy.
+- `BrandWordmark` accepts a string as `children` for CMS-managed branding, with
+  the existing Small Bites text as its default.
+- `SiteLogo` always combines `BrandIcon` and `BrandWordmark`, including their
+  alignment and spacing. Pass a string as `children` for CMS-managed branding.
 - `Heading` separates semantic level (`as`) from visual size. `Text` supports
   body, caption, and eyebrow variants with default, muted, and accent tones.
 - `IconButton` requires `aria-label`. Interface `Icon` uses Lucide and is
@@ -121,17 +127,23 @@ by these category paths. There is no `Atoms` group in Storybook.
 
 ## Shared layout
 
+- `PageShell`: `header`, `children`, and `footer` slots with optional
+  `mainContentId`. It supplies the main landmark, skip-link destination, and
+  viewport-height layout without app-authored styling.
 - `ContentContainer`: `as="div" | "main" | "section"`, and
   `width="content" | "wide"`, plus native element props.
 - `SiteHeader`: required `links` (`{ label, href }[]`); optional `currentHref`,
   `homeHref`, `brand` slot, `navigationLabel`, `skipLinkLabel`, and
   `mainContentId`. The app supplies its active route. Native anchors work without
-  a router dependency. Point the skip link at a main element with `tabIndex={-1}`.
+  a router dependency. Its default brand is `SiteLogo`; use
+  `brand={<SiteLogo>{siteName}</SiteLogo>}` for a CMS-managed name. Point the skip
+  link at a main element with `tabIndex={-1}`.
 - `SiteFooter`: required `tagline` and `copyright` content; optional footer
   `links` and `navigationLabel`. The app supplies the copyright year.
 
-Layouts do not import Payload, Next.js routing, or data-fetching code. Templates,
-recipe compositions, and homepage sections are deferred until page assembly.
+Layouts do not import Payload, Next.js routing, or data-fetching code. The first
+ISR app composes the shared shell and hero with the existing header and footer;
+recipe browsing and personalized sections remain future work.
 
 ## Data display
 

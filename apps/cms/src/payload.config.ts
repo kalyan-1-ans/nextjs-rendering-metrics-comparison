@@ -38,7 +38,9 @@ export default buildConfig({
       process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD ||
       process.env.PAYLOAD_MIGRATING === 'true' ||
       process.argv.some((arg) => arg.startsWith('generate:') || arg === 'migrate' || arg.startsWith('migrate:'))
-    ) return
+    ) {
+      return
+    }
 
     const { seedContent } = await import('./seed/index')
     await seedContent(payload)

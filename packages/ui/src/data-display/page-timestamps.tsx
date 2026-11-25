@@ -30,7 +30,9 @@ export function PageTimestamps({
     (entry): entry is { label: string; value: string } =>
       Boolean(entry.value) && Number.isFinite(Date.parse(entry.value!)),
   )
-  if (!entries.length) return null
+  if (!entries.length) {
+    return null
+  }
   return (
     <dl
       className={cn(

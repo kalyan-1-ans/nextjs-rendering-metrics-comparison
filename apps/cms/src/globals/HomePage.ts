@@ -2,6 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 import { globalContentAccess } from '../access/content'
 import { copyGroup, introduction } from '../fields/copy'
+import { revalidateContent } from '../hooks/revalidate-content'
 
 export const HomePage: GlobalConfig = {
   slug: 'home-page',
@@ -9,6 +10,7 @@ export const HomePage: GlobalConfig = {
   admin: { group: 'Pages' },
   access: globalContentAccess,
   versions: { drafts: true },
+  hooks: { afterChange: [revalidateContent('/')] },
   fields: [
     introduction('hero'),
     copyGroup('search', [

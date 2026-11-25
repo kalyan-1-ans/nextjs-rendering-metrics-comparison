@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from 'react'
-import { BrandWordmark } from '../brand/brand-wordmark'
+import { SiteLogo } from '../brand/site-logo'
 import { SkipLink } from '../accessibility/skip-link'
 import { ContentContainer } from './content-container'
 import { cn } from '#lib/utils'
@@ -22,7 +22,7 @@ export function SiteHeader({
   links,
   currentHref,
   homeHref = '/',
-  brand = <BrandWordmark />,
+  brand = <SiteLogo />,
   navigationLabel = 'Main navigation',
   skipLinkLabel = 'Skip to main content',
   mainContentId = 'main-content',

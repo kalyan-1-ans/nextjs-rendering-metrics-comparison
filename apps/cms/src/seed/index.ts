@@ -18,7 +18,9 @@ async function hasEditorialContent(payload: Payload, req: PayloadRequest): Promi
     overrideAccess: true,
     req,
   })
-  if (existingRecipes.docs.length) return true
+  if (existingRecipes.docs.length) {
+    return true
+  }
 
   const recipeVersions = await payload.findVersions({
     collection: 'recipes',
@@ -27,12 +29,16 @@ async function hasEditorialContent(payload: Payload, req: PayloadRequest): Promi
     overrideAccess: true,
     req,
   })
-  if (recipeVersions.docs.length) return true
+  if (recipeVersions.docs.length) {
+    return true
+  }
 
   for (const slug of globalSlugs) {
     // Find the actual row: the Local API fills defaults even for an unsaved Global.
     const existingGlobal = await payload.db.findGlobal({ slug, select: { id: true }, req })
-    if (existingGlobal && 'id' in existingGlobal) return true
+    if (existingGlobal && 'id' in existingGlobal) {
+      return true
+    }
 
     const versions = await payload.findGlobalVersions({
       slug,
@@ -41,7 +47,9 @@ async function hasEditorialContent(payload: Payload, req: PayloadRequest): Promi
       overrideAccess: true,
       req,
     })
-    if (versions.docs.length) return true
+    if (versions.docs.length) {
+      return true
+    }
   }
 
   return false
@@ -62,7 +70,9 @@ async function initializeContent(payload: Payload, reset: boolean): Promise<Seed
   try {
     const transaction = payload.db.sessions?.[transactionID]?.db as
       PostgresAdapter['sessions'][string]['db'] | undefined
-    if (!transaction) throw new Error('Could not obtain the seed transaction.')
+    if (!transaction) {
+      throw new Error('Could not obtain the seed transaction.')
+    }
 
     await transaction.execute(sql`SELECT pg_advisory_xact_lock(hashtext(${seedKey}))`)
 

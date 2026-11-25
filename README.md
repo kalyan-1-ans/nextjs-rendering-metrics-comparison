@@ -2,8 +2,8 @@
 
 Small Bites is a demo recipe blog built to compare Next.js rendering approaches
 and performance metrics using the same content and design. This pnpm workspace
-contains the workspace foundation, Oxlint, TypeScript, and an independent Payload
-CMS app. The consumer Next.js apps have not been scaffolded.
+contains the workspace foundation, Oxlint, TypeScript, an independent Payload
+CMS app, a shared design system, and the first Next.js consumer using on-demand ISR.
 
 This is a demo app. Do not add unit tests or end-to-end tests.
 
@@ -39,6 +39,12 @@ pnpm lint
 
 Use `pnpm lint:fix` to apply automatic lint fixes.
 
+Oxlint checks correctness with the TypeScript, Unicorn, Oxc, React (including
+Hooks), JSX accessibility, import, and Promise plugins. Next.js checks apply only
+to `apps/`, so shared UI stays framework-independent. Braces and Hooks ordering
+are errors; Hook dependency checks are warnings. The configuration lives in
+[.oxlintrc.json](.oxlintrc.json).
+
 ## Shared UI
 
 [`@small-bites/ui`](packages/ui/README.md) contains the Small Bites design
@@ -55,6 +61,38 @@ pnpm build:storybook
 Storybook runs at <http://localhost:6006>. Its static build is generated in
 `packages/ui/storybook-static`. Stories document component states and responsive
 layout; no test runner or testing addons are configured.
+
+## ISR app
+
+[`@small-bites/cms-data`](packages/cms-data/README.md) provides the typed Payload
+REST client and shared content queries, including `getHomeContent()`. The package
+reads `CMS_URL` from the consuming app's environment. App Router and Pages Router
+consumers own their server boundaries and caching strategy. Run `pnpm typecheck:cms-data` to
+check the package.
+
+[`apps/isr`](apps/isr/README.md) is the first consumer, serving the CMS-backed
+header, hero, and footer on <http://localhost:3001>.
+
+```sh
+cp -n apps/isr/.env.example apps/isr/.env.local
+pnpm dev:isr
+# Production behavior:
+pnpm build:isr
+pnpm start:isr
+```
+
+Cache Components and partial prefetching are enabled. The homepage file caches
+its rendered output and metadata with `'use cache'` and `cacheLife('max')`;
+Payload reads use `cache: 'no-store'`. Publishing
+Site settings or Home page notifies the endpoints in the CMS's
+`ISR_REVALIDATION_URLS` with `{ "path": "/" }` for Home page or
+`{ "path": "all" }` for Site settings. Manual `POST /api/revalidate` requests use
+the same JSON body to invalidate one route or every route.
+Vercel and Netlify manage CDN invalidation through their Next.js integrations.
+Netlify build settings live in [apps/isr/netlify.toml](apps/isr/netlify.toml);
+select `apps/isr` as the package directory when connecting the repository.
+The app is not deployed by setup.
+Use `pnpm typecheck:isr` for its TypeScript check.
 
 ## CMS
 

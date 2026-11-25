@@ -2,8 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useId, type ComponentProps } from 'react'
 import { ContentContainer } from './content-container'
 import { SiteHeader } from './site-header'
-import { BrandIcon } from '../brand/brand-icon'
-import { BrandWordmark } from '../brand/brand-wordmark'
+import { SiteLogo } from '../brand/site-logo'
 const meta = {
   title: 'Shared layout/SiteHeader',
   component: SiteHeader,
@@ -31,14 +30,9 @@ function HeaderExample(args: ComponentProps<typeof SiteHeader>) {
   )
 }
 export const Default: Story = { render: (args) => <HeaderExample {...args} /> }
-export const WithBrandIcon: Story = {
+export const CustomBrandName: Story = {
   ...Default,
   args: {
-    brand: (
-      <span className="flex items-center gap-3">
-        <BrandIcon alt="" />
-        <BrandWordmark />
-      </span>
-    ),
+    brand: <SiteLogo>Small bites kitchen.</SiteLogo>,
   },
 }

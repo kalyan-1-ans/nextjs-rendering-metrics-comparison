@@ -1,7 +1,13 @@
 import type { ComponentProps } from 'react'
 import { cn } from '#lib/utils'
 
-export function BrandWordmark({ className, ...props }: Omit<ComponentProps<'span'>, 'children'>) {
+export type BrandWordmarkProps = Omit<ComponentProps<'span'>, 'children'> & { children?: string }
+
+export function BrandWordmark({
+  children = 'Small bites.',
+  className,
+  ...props
+}: BrandWordmarkProps) {
   return (
     <span
       className={cn(
@@ -10,7 +16,7 @@ export function BrandWordmark({ className, ...props }: Omit<ComponentProps<'span
       )}
       {...props}
     >
-      Small bites.
+      {children}
     </span>
   )
 }

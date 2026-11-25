@@ -3,6 +3,11 @@
   "private": true,
   "packageManager": "pnpm@10.34.5",
   "scripts": {
+    "dev:isr": "pnpm --filter @small-bites/isr dev",
+    "build:isr": "pnpm --filter @small-bites/isr build",
+    "start:isr": "pnpm --filter @small-bites/isr start",
+    "typecheck:isr": "pnpm --filter @small-bites/isr typecheck",
+    "typecheck:cms-data": "pnpm --filter @small-bites/cms-data typecheck",
     "storybook": "pnpm --filter @small-bites/ui storybook",
     "build:storybook": "pnpm --filter @small-bites/ui build:storybook",
     "typecheck:ui": "pnpm --filter @small-bites/ui typecheck",
