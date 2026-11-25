@@ -20,9 +20,9 @@ export function SiteFooter({
   ...props
 }: SiteFooterProps) {
   return (
-    <footer className={cn('py-8 text-sm text-muted-foreground', className)} {...props}>
+    <footer className={cn('border-t border-border py-8 text-sm text-muted-foreground', className)} {...props}>
       <ContentContainer>
-        <div className="flex flex-col justify-between gap-4 border-t border-border pt-6 sm:flex-row sm:items-start">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
           <div className="space-y-3">
             <p>{tagline}</p>
             {links.length ? (

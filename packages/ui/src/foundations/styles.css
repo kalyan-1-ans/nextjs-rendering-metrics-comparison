@@ -57,6 +57,10 @@
   --text-body--line-height: 1.6;
   --text-title: 2.25rem;
   --text-title--line-height: 1.3;
+  --text-hero: 2rem;
+  --text-hero--line-height: 1.25;
+  --text-hero-desktop: 3.375rem;
+  --text-hero-desktop--line-height: 1.18;
   --text-section: 1.5rem;
   --text-section--line-height: 1.4;
   --container-content: 45rem;

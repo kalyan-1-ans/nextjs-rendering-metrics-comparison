@@ -14,6 +14,16 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 export const Default: Story = {}
+export const Mobile: Story = {
+  parameters: {
+    viewport: {
+      options: {
+        figmaMobile: { name: 'Figma mobile', styles: { width: '390px', height: '844px' } },
+      },
+    },
+  },
+  globals: { viewport: { value: 'figmaMobile', isRotated: false } },
+}
 export const LongContent: Story = {
   args: {
     heading: 'Simple food for the days when you need a little inspiration.',

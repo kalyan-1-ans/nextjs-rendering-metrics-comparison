@@ -2,6 +2,7 @@
 
 import 'server-only'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { cacheLife } from 'next/cache'
 import { getHomeContent } from '@small-bites/cms-data'
 import { SiteLogo } from '@small-bites/ui/brand/site-logo'
@@ -26,6 +27,7 @@ export default async function Home() {
     <PageShell
       header={
         <SiteHeader
+          linkComponent={Link}
           links={settings.navigation.links}
           navigationLabel={settings.navigation.label}
           currentHref="/"

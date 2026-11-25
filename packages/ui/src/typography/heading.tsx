@@ -5,6 +5,7 @@ import { cn } from '#lib/utils'
 const headingVariants = cva('font-serif font-normal text-foreground text-balance', {
   variants: {
     size: {
+      hero: 'text-hero text-wrap sm:text-hero-desktop',
       title: 'text-3xl leading-tight sm:text-title',
       section: 'text-section',
       card: 'text-xl leading-snug',

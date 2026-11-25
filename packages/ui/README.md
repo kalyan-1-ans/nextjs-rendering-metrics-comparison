@@ -100,7 +100,8 @@ The former `atoms/*` entry points and `layout/page-timestamps` have been replace
 by these category paths. There is no `Atoms` group in Storybook.
 
 - `HeroBanner` receives `eyebrow`, `heading`, and `description`, preserving line breaks.
-  It owns hero spacing and responsive typography; apps supply only the copy.
+  It uses the green inset panel and 54px heading on larger screens, and a plain
+  introduction with a 32px heading on mobile. Apps supply only the copy.
 - `BrandWordmark` accepts a string as `children` for CMS-managed branding, with
   the existing Small Bites text as its default.
 - `SiteLogo` always combines `BrandIcon` and `BrandWordmark`, including their
@@ -133,11 +134,15 @@ by these category paths. There is no `Atoms` group in Storybook.
 - `ContentContainer`: `as="div" | "main" | "section"`, and
   `width="content" | "wide"`, plus native element props.
 - `SiteHeader`: required `links` (`{ label, href }[]`); optional `currentHref`,
-  `homeHref`, `brand` slot, `navigationLabel`, `skipLinkLabel`, and
+  `homeHref`, `linkComponent`, `brand` slot, `navigationLabel`, `skipLinkLabel`, and
   `mainContentId`. The app supplies its active route. Native anchors work without
   a router dependency. Its default brand is `SiteLogo`; use
   `brand={<SiteLogo>{siteName}</SiteLogo>}` for a CMS-managed name. Point the skip
   link at a main element with `tabIndex={-1}`.
+  For Next.js navigation, import `Link` from `next/link` in the app and pass
+  `linkComponent={Link}`. The header forwards the logo and navigation links'
+  `href`, children, styles, and accessibility props to that component. The default
+  is a native anchor; the skip link always remains a native anchor.
 - `SiteFooter`: required `tagline` and `copyright` content; optional footer
   `links` and `navigationLabel`. The app supplies the copyright year.
 

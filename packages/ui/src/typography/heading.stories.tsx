@@ -8,5 +8,6 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 export const Default: Story = {}
+export const Hero: Story = { args: { as: 'h1', size: 'hero' } }
 export const Title: Story = { args: { as: 'h1', size: 'title' } }
 export const Card: Story = { args: { as: 'h3', size: 'card' } }
