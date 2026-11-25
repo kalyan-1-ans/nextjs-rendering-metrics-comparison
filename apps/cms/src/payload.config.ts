@@ -4,6 +4,12 @@ import { fileURLToPath } from 'node:url'
 import { buildConfig } from 'payload'
 
 import { Users } from './collections/Users'
+import { Recipes } from './collections/Recipes'
+import { AboutPage } from './globals/AboutPage'
+import { ContactPage } from './globals/ContactPage'
+import { HomePage } from './globals/HomePage'
+import { RecipePage } from './globals/RecipePage'
+import { SiteSettings } from './globals/SiteSettings'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const databaseURL = process.env.DATABASE_URL
@@ -24,7 +30,8 @@ export default buildConfig({
       baseDir: dirname,
     },
   },
-  collections: [Users],
+  collections: [Users, Recipes],
+  globals: [SiteSettings, HomePage, RecipePage, AboutPage, ContactPage],
   db: postgresAdapter({
     pool: {
       connectionString: databaseURL,
@@ -38,6 +45,7 @@ export default buildConfig({
   serverURL: process.env.CMS_URL || 'http://localhost:3000',
   telemetry: false,
   typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
+    declare: false,
+    outputFile: path.resolve(dirname, '../../../packages/cms-types/src/generated.ts'),
   },
 })

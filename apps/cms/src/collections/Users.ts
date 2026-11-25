@@ -1,6 +1,6 @@
-import type { Access, CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
 
-const authenticated: Access = ({ req: { user } }) => Boolean(user)
+import { authenticated } from '../access/content'
 
 // All CMS users are trusted administrators. Consumer apps have no user access.
 export const Users: CollectionConfig = {

@@ -41,8 +41,13 @@ Use `pnpm lint:fix` to apply automatic lint fixes.
 ## CMS
 
 [`apps/cms`](apps/cms/README.md) is a standalone Payload CMS app backed by
-PostgreSQL. It currently includes only authenticated CMS users; no Small Bites
-collections, pages, media, or sample content have been added.
+PostgreSQL. It includes administrator accounts, a recipe collection, and five
+Globals for Small Bites page content and interface copy. Schemas are configured;
+no recipes, page copy, or visitor data are seeded.
+
+[`packages/cms-types`](packages/cms-types/README.md) provides generated content
+types shared by the CMS and future consumer apps. Collection definitions and
+database code remain inside the CMS.
 
 Follow the [CMS setup instructions](apps/cms/README.md) to configure `apps/cms/.env`
 and use either the local Docker database or another PostgreSQL server. With the
@@ -64,6 +69,7 @@ Useful root commands:
 | `pnpm build:cms` | Build the CMS for production |
 | `pnpm start:cms` | Start the production build |
 | `pnpm typecheck:cms` | Check CMS TypeScript |
+| `pnpm typecheck:cms-types` | Check shared content types without Payload dependencies |
 | `pnpm cms:db:start` | Start the local Docker PostgreSQL database |
 | `pnpm cms:db:stop` | Stop the local database while retaining data |
 | `pnpm cms:generate:types` | Regenerate Payload types |

@@ -7,6 +7,7 @@
     "build:cms": "pnpm --filter @rendering-metrics/cms build",
     "start:cms": "pnpm --filter @rendering-metrics/cms start",
     "typecheck:cms": "pnpm --filter @rendering-metrics/cms typecheck",
+    "typecheck:cms-types": "pnpm --filter @rendering-metrics/cms-types typecheck",
     "cms:db:start": "docker compose --env-file apps/cms/.env -f apps/cms/compose.yaml up -d --wait",
     "cms:db:stop": "docker compose --env-file apps/cms/.env -f apps/cms/compose.yaml stop",
     "cms:generate:types": "pnpm --filter @rendering-metrics/cms generate:types",
