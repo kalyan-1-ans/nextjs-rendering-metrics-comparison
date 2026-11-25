@@ -27,5 +27,6 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 export const Default: Story = {}
+export const Large: Story = { args: { size: 'lg' } }
 export const Disabled: Story = { args: { disabled: true } }
 export const Invalid: Story = { args: { 'aria-invalid': true } }

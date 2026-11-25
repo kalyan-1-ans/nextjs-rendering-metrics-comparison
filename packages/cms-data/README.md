@@ -19,6 +19,8 @@ const { settings, home } = await getHomeContent()
   `home-page` Globals in parallel, with relationship depth set to zero.
 - `getAboutContent()` reads published `site-settings` and `about-page` Globals
   with the same uncached, parallel request pattern.
+- `getContactContent()` reads published `site-settings` and `contact-page` Globals
+  with the same uncached, parallel request pattern.
 - `CMSClient` exports the shared client type for additional content queries.
 
 ## Router integration

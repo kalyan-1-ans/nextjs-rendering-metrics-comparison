@@ -354,13 +354,14 @@ pass `overrideAccess: false`; Local API calls otherwise bypass access control.
 
 ### Consumer revalidation
 
-Publishing `site-settings`, `home-page`, or `about-page` POSTs to every comma-separated URL in
-`ISR_REVALIDATION_URLS`. For the local app, use
+Publishing `site-settings`, `home-page`, `about-page`, or `contact-page` POSTs to
+every comma-separated URL in `ISR_REVALIDATION_URLS`. For the local app, use
 `http://localhost:3001/api/revalidate`; for two deployed copies, list both the
 Vercel and Netlify endpoints. Restart the CMS after environment changes.
 
 The JSON body identifies what to invalidate: Home page sends `{ "path": "/" }`,
 About page sends `{ "path": "/about" }`,
+Contact page sends separate notifications for `/contact` and `/contact/confirmation`,
 while Site settings sends `{ "path": "all" }` because its branding, navigation,
 and footer affect every page. The `revalidateContent(path)` hook factory is
 configured on each Global. Consumer apps treat `"all"` as root-layout

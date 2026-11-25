@@ -1,7 +1,7 @@
 # Small Bites — on-demand ISR
 
 The first consumer app renders the homepage header, hero, and footer, and the
-About page from published Payload Globals. Contact us is a placeholder.
+About and Contact pages from published Payload Globals. The Contact form is UI-only.
 All UI comes from `@small-bites/ui`; the app has no custom styles.
 
 ## Run locally
@@ -45,14 +45,40 @@ Payload or connect to its database.
 - Footer copy comes from `site-settings.footer`.
 - Page title and description are also derived from the CMS.
 
-Publish both Globals before building. Required content is validated by Payload;
+Publish Site settings and each page Global before building. Required content is validated by Payload;
 the app uses the typed SDK responses directly and lets request errors propagate.
 The About page reads `site-settings` and `about-page` through `getAboutContent()`.
 Its introduction, text sections, back-link label, metadata description, and timestamp
 labels come from Payload. Creation/update dates come from the About Global; the
 render time is captured inside the page cache boundary, so it changes when the
 cached page regenerates. The existing timestamp component formats dates in
-`Australia/Brisbane`. Contact us remains a placeholder.
+`Australia/Brisbane`.
+
+The Contact page reads `site-settings` and `contact-page` through
+`getContactContent()`. It renders the CMS introduction, field labels/placeholders,
+submit label, and privacy copy. Name and email appear side by side on larger
+screens and stack on mobile. The message field uses the shared `TextArea` atom.
+The Contact form itself lives in `src/components/contact-form.tsx`; it composes
+the shared `Form`, `FormField`, layout, and control atoms. Field selection and
+dummy submission behavior belong to the app; styling stays in the UI package.
+Submitting a valid form dispatches its name, email, and message through React
+`useActionState` to `src/app/contact/_lib/contact.action.ts`. The dummy Server
+Action waits 500ms and returns `{ success: true, data }`. The frontend navigates
+to `/contact/confirmation` only after receiving success. Data is received by the
+app server and returned in action state; nothing is saved or delivered.
+TanStack Form and Zod validate on submit: name/message must contain non-whitespace text, and email
+must be present and valid. `noValidate` disables browser validation popups so the
+CMS-managed messages appear inline through `FormField`. Controls are marked
+`aria-invalid` and linked to their error text. Invalid submissions focus the first
+invalid control in name/email/message order after the inline errors render.
+The submit button uses the shared loading state while validating, awaiting the
+Server Action, or navigating. Actual message delivery remains unimplemented.
+
+`/contact/confirmation` previews the CMS-managed message-received screen and back
+link. It is excluded from indexing and is displayed after the dummy submit.
+Both Contact routes cache page output and metadata with `cacheLife('max')`.
+Both display CMS creation/update dates and a render timestamp captured inside
+the page cache boundary, using the shared `PageTimestamps` component.
 
 ## Cache the rendered page
 
@@ -116,9 +142,10 @@ ISR_REVALIDATION_URLS=http://localhost:3001/api/revalidate
 ```
 
 Publishing Home page sends `{ "path": "/" }`; About page sends
-`{ "path": "/about" }`; publishing Site settings sends
+`{ "path": "/about" }`. Publishing Contact page sends separate notifications for
+`/contact` and `/contact/confirmation`. Publishing Site settings sends
 `{ "path": "all" }` because branding, navigation, and footer content are shared
-across pages. Both use the `revalidateContent(path)` hook factory. Draft-only
+across pages. All use the `revalidateContent(path)` hook factory. Draft-only
 saves do not trigger delivery. Failures are logged without blocking publication; retry the
 POST manually after restoring the consumer. The hook schedules delivery with Next.js `after()` after the HTTP response, so
 Payload has committed the publish before cache invalidation. Standalone CLI or
@@ -164,6 +191,7 @@ purge API.
 Configure `ISR_REVALIDATION_URLS` in the CMS with this site's
 `https://YOUR-SITE.netlify.app/api/revalidate` endpoint. Publishing Home page
 invalidates only `/`; publishing About page invalidates `/about`; publishing
+Contact page invalidates `/contact` and `/contact/confirmation`; publishing
 Site settings sends `"all"` and invalidates
 all routes under the root layout. Other cached routes remain intact for a
 single-path request.

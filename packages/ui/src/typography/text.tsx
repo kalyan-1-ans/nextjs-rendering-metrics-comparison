@@ -9,7 +9,12 @@ const textVariants = cva('', {
       caption: 'text-sm leading-relaxed',
       eyebrow: 'text-xs leading-relaxed font-medium tracking-widest uppercase',
     },
-    tone: { default: 'text-foreground', muted: 'text-muted-foreground', accent: 'text-primary' },
+    tone: {
+      default: 'text-foreground',
+      muted: 'text-muted-foreground',
+      accent: 'text-primary',
+      error: 'text-destructive',
+    },
   },
   defaultVariants: { variant: 'body', tone: 'default' },
 })

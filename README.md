@@ -16,7 +16,7 @@ mean it has been installed or configured yet.
 | --- | --- |
 | Monorepo | pnpm |
 | Framework | Next.js 16, React 19, Vite |
-| Forms, state, and caching | TanStack Form, TanStack Query (React Query), Zustand, Next.js Cache Components |
+| Forms, state, and caching | TanStack Form, Zod, TanStack Query (React Query), Zustand, Next.js Cache Components |
 | CMS | Payload CMS |
 | Database | PostgreSQL |
 | UI | Tailwind CSS v4, Base UI, shadcn/ui |
@@ -65,14 +65,16 @@ layout; no test runner or testing addons are configured.
 ## ISR app
 
 [`@small-bites/cms-data`](packages/cms-data/README.md) provides the typed Payload
-REST client and shared content queries, including `getHomeContent()` and
-`getAboutContent()`. The package
+REST client and shared content queries, including `getHomeContent()`,
+`getAboutContent()`, and `getContactContent()`. The package
 reads `CMS_URL` from the consuming app's environment. App Router and Pages Router
 consumers own their server boundaries and caching strategy. Run `pnpm typecheck:cms-data` to
 check the package.
 
 [`apps/isr`](apps/isr/README.md) is the first consumer, serving the CMS-backed
-homepage and About page on <http://localhost:3001>. Contact us is a placeholder.
+homepage, About, and Contact pages on <http://localhost:3001>. The Contact form
+has a dummy Server Action that waits briefly, returns success, and opens the
+acknowledgment page. Messages are not stored or delivered.
 
 ```sh
 cp -n apps/isr/.env.example apps/isr/.env.local
@@ -82,12 +84,12 @@ pnpm build:isr
 pnpm start:isr
 ```
 
-Cache Components and partial prefetching are enabled. The homepage file caches
+Cache Components and partial prefetching are enabled. Each page file caches
 its rendered output and metadata with `'use cache'` and `cacheLife('max')`;
-Payload reads use `cache: 'no-store'`. Publishing
-Site settings or Home page notifies the endpoints in the CMS's
-`ISR_REVALIDATION_URLS` with `{ "path": "/" }` for Home page or
-`{ "path": "all" }` for Site settings. Manual `POST /api/revalidate` requests use
+Payload reads use `cache: 'no-store'`. Publishing Home, About, or Contact notifies
+the endpoints in the CMS's `ISR_REVALIDATION_URLS` with each affected route's path.
+Contact also invalidates its confirmation preview. Site settings sends
+`{ "path": "all" }`. Manual `POST /api/revalidate` requests use
 the same JSON body to invalidate one route or every route.
 Vercel and Netlify manage CDN invalidation through their Next.js integrations.
 Netlify build settings live in [apps/isr/netlify.toml](apps/isr/netlify.toml);

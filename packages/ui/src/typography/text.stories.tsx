@@ -10,6 +10,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {}
 export const Muted: Story = { args: { tone: 'muted' } }
 export const Caption: Story = { args: { variant: 'caption' } }
+export const Error: Story = {
+  args: { variant: 'caption', tone: 'error', children: 'Please enter your name.' },
+}
 export const Eyebrow: Story = {
   args: { variant: 'eyebrow', tone: 'accent', children: 'Good food. No fuss.' },
 }

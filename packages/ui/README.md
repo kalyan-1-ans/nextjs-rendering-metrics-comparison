@@ -87,12 +87,12 @@ Source folders, public import paths, and Storybook use functional categories:
 | Brand and icons | `brand/`         | `SiteLogo`, `BrandWordmark`, `BrandIcon`, `Icon`                                               |
 | Typography      | `typography/`    | `Heading`, `Text`                                                                              |
 | Actions         | `actions/`       | `Button`, `IconButton`, `TextLink`                                                             |
-| Forms           | `forms/`         | `Label`, `TextInput`, `SearchInput`, `Select`, `Radio`, `RadioGroup`, `Checkbox`, `ChoiceChip` |
+| Forms           | `forms/`         | `Form`, `FormRow`, `FormField`, `Label`, `TextInput`, `TextArea`, `SearchInput`, `Select`, `Radio`, `RadioGroup`, `Checkbox`, `ChoiceChip` |
 | Content         | `content/`       | `Card`, `Divider`, `HeroBanner`, `PageIntroduction`, `TextSection`                             |
 | Data display    | `data-display/`  | `Tag`, `PageTimestamps`                                                                        |
 | Feedback        | `feedback/`      | `Skeleton`, `Spinner`                                                                          |
 | Accessibility   | `accessibility/` | `SkipLink`, `VisuallyHidden`                                                                   |
-| Shared layout   | `layout/`        | `ContentContainer`, `SiteHeader`, `SiteFooter`, `PageShell`, `PageContent`                     |
+| Shared layout   | `layout/`        | `ContentContainer`, `SiteHeader`, `SiteFooter`, `PageShell`, `PageContent`, `Stack`            |
 
 For example, import `SearchInput` from `@small-bites/ui/forms/search-input`
 and `PageTimestamps` from `@small-bites/ui/data-display/page-timestamps`.
@@ -107,18 +107,43 @@ by these category paths. There is no `Atoms` group in Storybook.
 - `SiteLogo` always combines `BrandIcon` and `BrandWordmark`, including their
   alignment and spacing. Pass a string as `children` for CMS-managed branding.
 - `Heading` separates semantic level (`as`) from visual size. `Text` supports
-  body, caption, and eyebrow variants with default, muted, and accent tones.
+  body, caption, and eyebrow variants with default, muted, accent, and error tones.
 - `PageIntroduction` combines the eyebrow, page heading (32px on mobile, 42px
   on larger screens), and description, preserving authored line breaks.
 - `TextSection` combines a section heading and plain-text body with readable
   typography and spacing. All `TextLink`s underline on hover, with consistent
   typography and sizing. They support the same optional `linkComponent`
   integration as the header.
+- `Button` fills the available width below the `sm` breakpoint (640px), with
+  natural sizing on larger screens. Pass `fullWidthOnMobile={false}` for compact
+  buttons. `IconButton` defaults this prop to `false` to preserve its icon sizing.
+- Set `loading` on `Button` or `IconButton` to show the shared spinner, mark the
+  control `aria-busy`, and block activation. Loading buttons retain keyboard focus
+  by default through Base UI's `focusableWhenDisabled` behavior. Text labels stay
+  visible; icon-only sizes replace their icon with the spinner. The caller owns
+  the loading state and can change the label through children.
 - `IconButton` requires `aria-label`. Interface `Icon` uses Lucide and is
   decorative unless given `label`. Give `BrandIcon` `alt=""` beside the wordmark.
 - `SearchInput` is controlled with `value` and `onValueChange`. Its clear action
   restores input focus. Supply a visible label or `aria-label`. Search queries
   and suggestions belong to the app.
+- `FormField` associates a visible `label` with a control through `htmlFor` and
+  provides their shared spacing. Its optional `error` string renders through
+  typography with ID `${htmlFor}-error`; the app sets the control's `aria-invalid`
+  and `aria-describedby` props. Validation schemas and focus behavior stay in the
+  app, and the UI package has no TanStack Form or Zod dependency.
+  `TextArea` forwards native textarea props and
+  supports resizing, focus, disabled, and invalid states. `TextInput` and `TextArea`
+  accept `size="lg"` for larger form controls; their default sizing is unchanged.
+- `Form` and `FormRow` provide shared form spacing and responsive layout. Use
+  `Stack gap="sm" align="start"` to group actions and helper text, and
+  `Button type="submit"` with its `size` prop for submit buttons. Use typography's
+  `Text variant="caption" tone="muted"` for helper or privacy copy. These components
+  forward native props and do not
+  handle submission.
+- App-specific forms, their CMS field selection, validation, and submission behavior
+  belong in the consuming app. The ISR Contact form composes these reusable pieces
+  without app-authored styling and performs its dummy navigation in the app.
 - `Radio` and radio `ChoiceChip` belong inside the exported `RadioGroup`.
   `ChoiceChip type="checkbox"` supports independent selections through
   `checked`/`onCheckedChange` or `defaultChecked`. Label groups with a legend or
@@ -139,6 +164,10 @@ by these category paths. There is no `Atoms` group in Storybook.
   viewport-height layout without app-authored styling.
 - `ContentContainer`: `as="div" | "main" | "section"`, and
   `width="content" | "wide"`, plus native element props.
+- `Stack`: vertical layout with `gap="none" | "xs" | "sm" | "md" | "lg"` and
+  `align="start" | "center" | "end" | "stretch"`. Defaults are `md` spacing and
+  stretched children. Use `align="start"` when children should size naturally;
+  responsive button width remains owned by `Button`.
 - `PageContent`: content-width layout for information pages, with responsive
   vertical spacing, room below short pages, and an optional `timestamps` slot.
 - `SiteHeader`: required `links` (`{ label, href }[]`); optional `currentHref`,
@@ -156,8 +185,10 @@ by these category paths. There is no `Atoms` group in Storybook.
 
 Layouts do not import Payload, Next.js routing, or data-fetching code. The first
 ISR app composes the shared shell and hero for Home, and the introduction, text
-sections, back link, and timestamps for About. Recipe browsing and personalized
-sections remain future work.
+sections, back link, and timestamps for About. Contact reuses the introduction
+and page layout, with an app-owned form composed from shared fields and controls,
+and a separate confirmation preview.
+Recipe browsing and personalized sections remain future work.
 
 ## Data display
 

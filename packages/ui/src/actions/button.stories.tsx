@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from './button'
-import { Spinner } from '../feedback/spinner'
 const meta = {
   title: 'Actions/Button',
   component: Button,
@@ -9,6 +8,21 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 export const Default: Story = {}
+export const Compact: Story = { args: { fullWidthOnMobile: false } }
+export const Mobile: Story = {
+  parameters: {
+    viewport: {
+      options: {
+        mobile: { name: 'Mobile', styles: { width: '390px', height: '844px' } },
+      },
+    },
+  },
+  globals: { viewport: { value: 'mobile', isRotated: false } },
+}
+export const CompactOnMobile: Story = {
+  ...Mobile,
+  args: { fullWidthOnMobile: false },
+}
 export const Variants: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
@@ -36,13 +50,7 @@ export const Sizes: Story = {
 export const Disabled: Story = { args: { disabled: true } }
 export const Loading: Story = {
   args: {
-    disabled: true,
-    'aria-busy': true,
-    children: (
-      <>
-        <Spinner aria-hidden="true" />
-        Loading recipes
-      </>
-    ),
+    loading: true,
+    children: 'Loading recipes',
   },
 }
