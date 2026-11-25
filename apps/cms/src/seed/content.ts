@@ -1,4 +1,4 @@
-import type { Config, Recipe } from '@rendering-metrics/cms-types/generated'
+import type { Config, Recipe } from '@small-bites/cms-types/generated'
 
 type SeedDocument<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>
 

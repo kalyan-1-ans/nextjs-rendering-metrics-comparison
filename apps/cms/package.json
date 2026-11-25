@@ -1,5 +1,5 @@
 {
-  "name": "@rendering-metrics/cms",
+  "name": "@small-bites/cms",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -29,7 +29,7 @@
     "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "@rendering-metrics/cms-types": "workspace:*",
+    "@small-bites/cms-types": "workspace:*",
     "@types/node": "^24.12.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0"

@@ -1,5 +1,5 @@
 import { type MigrateUpArgs, type MigrateDownArgs, sql } from '@payloadcms/db-postgres'
-import type { HomePage, Recipe } from '@rendering-metrics/cms-types'
+import type { HomePage, Recipe } from '@small-bites/cms-types'
 
 type MigrationContext = Pick<MigrateUpArgs, 'payload' | 'req'>
 

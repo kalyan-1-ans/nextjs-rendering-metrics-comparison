@@ -1,6 +1,6 @@
 # CMS types
 
-Private, type-only workspace package: `@rendering-metrics/cms-types`.
+Private, type-only workspace package: `@small-bites/cms-types`.
 
 Payload collection and Global definitions in the CMS are the source of truth.
 `src/generated.ts` is produced by `pnpm cms:generate:types` from the repository
@@ -21,13 +21,13 @@ import type {
   DietStyle,
   FreeFromPreference,
   RecipePreferences,
-} from '@rendering-metrics/cms-types'
+} from '@small-bites/cms-types'
 ```
 
-Add `"@rendering-metrics/cms-types": "workspace:*"` to each consumer app's
+Add `"@small-bites/cms-types": "workspace:*"` to each consumer app's
 `devDependencies`. Use `import type`; the package has no JavaScript exports,
 runtime dependencies, database code or Payload configuration. The CMS uses the
-`@rendering-metrics/cms-types/generated` subpath to import its generated `Config`.
+`@small-bites/cms-types/generated` subpath to import its generated `Config`.
 Payload module augmentation is confined to the CMS app.
 
 Run `pnpm typecheck:cms-types` to check the package with no ambient dependency

@@ -1,8 +1,9 @@
-# Next.js rendering metrics comparison
+# Small Bites
 
-A pnpm workspace for comparing Next.js rendering approaches and performance
-metrics. Contains the workspace foundation, Oxlint, TypeScript, and an independent
-Payload CMS app. The consumer Next.js apps have not been scaffolded.
+Small Bites is a demo recipe blog built to compare Next.js rendering approaches
+and performance metrics using the same content and design. This pnpm workspace
+contains the workspace foundation, Oxlint, TypeScript, and an independent Payload
+CMS app. The consumer Next.js apps have not been scaffolded.
 
 This is a demo app. Do not add unit tests or end-to-end tests.
 

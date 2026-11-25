@@ -1,4 +1,4 @@
-# Payload CMS
+# Small Bites CMS
 
 Independent Payload CMS with PostgreSQL, a Next.js admin interface at `/admin`,
 and a REST API at `/api`. `/` redirects to `/admin`. All CMS users are trusted
@@ -30,6 +30,8 @@ pnpm cms:db:stop
 
 The container is named `rendering-metrics-cms-db`. Data persists in the Docker
 volume `rendering-metrics-cms-postgres` when the container is stopped or recreated.
+These Docker resource names and the database name retain their original identifiers
+so the Small Bites workspace continues to use existing local data.
 Port `55432` is bound only to localhost to avoid existing services on `5432` and `5433`.
 `POSTGRES_PASSWORD` initializes a new volume;
 changing the environment file does not change an existing database password.
@@ -38,7 +40,7 @@ To register this server in pgAdmin, right-click **Servers → Register → Serve
 
 | Setting | Value |
 | --- | --- |
-| Name | Rendering Metrics CMS |
+| Name | Small Bites CMS |
 | Host name/address | `127.0.0.1` |
 | Port | `55432` |
 | Maintenance database | `rendering_metrics_cms` |
@@ -352,12 +354,12 @@ pass `overrideAccess: false`; Local API calls otherwise bypass access control.
 
 ### Shared generated types
 
-Payload generates types directly into the `@rendering-metrics/cms-types` workspace
+Payload generates types directly into the `@small-bites/cms-types` workspace
 package. Its public entry exports `Recipe`, `SiteSettings`, `HomePage`, `RecipePage`,
 `AboutPage`, `ContactPage`, `MealType` and `DietaryTag`:
 
 ```ts
-import type { Recipe, HomePage } from '@rendering-metrics/cms-types'
+import type { Recipe, HomePage } from '@small-bites/cms-types'
 ```
 
 The package contains types only and has no runtime dependencies. The CMS uses its

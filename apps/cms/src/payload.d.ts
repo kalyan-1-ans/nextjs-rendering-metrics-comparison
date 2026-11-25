@@ -1,4 +1,4 @@
-import type { Config } from '@rendering-metrics/cms-types/generated'
+import type { Config } from '@small-bites/cms-types/generated'
 import 'payload'
 
 declare module 'payload' {
