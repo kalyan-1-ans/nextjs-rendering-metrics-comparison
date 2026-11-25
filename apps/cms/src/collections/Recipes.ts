@@ -50,6 +50,11 @@ export const Recipes: CollectionConfig = {
         'Use lowercase letters, numbers and single hyphens between words.',
     },
     { name: 'summary', type: 'textarea', required: true },
+    {
+      name: 'recommendationSummary',
+      type: 'textarea',
+      admin: { description: 'Optional shorter blurb for personalized recommendations. Consumers fall back to summary when blank.' },
+    },
     { name: 'introduction', type: 'textarea', required: true },
     {
       name: 'mealType',
@@ -76,7 +81,7 @@ export const Recipes: CollectionConfig = {
         { label: 'Dairy-free', value: 'dairy-free' },
         { label: 'Gluten-free', value: 'gluten-free' },
       ],
-      admin: { description: 'Select every applicable preference. Everything is a UI filter, not a tag.' },
+      admin: { description: 'Select all applicable tags. Consumers show one diet style choice and multiple free-from choices; all selected tags must match. Any applies no diet style constraint and is not stored.' },
     },
     { name: 'cookingMinutes', type: 'number', required: true, index: true, validate: positiveNumber },
     {

@@ -18,6 +18,9 @@ import type {
   ContactPage,
   MealType,
   DietaryTag,
+  DietStyle,
+  FreeFromPreference,
+  RecipePreferences,
 } from '@rendering-metrics/cms-types'
 ```
 
@@ -36,3 +39,10 @@ drafts, field selections and an unpublished Global's empty response may not matc
 a complete document; consumers should request published content and handle
 missing/selected fields before rendering. Visitor submission types belong to the
 future application-data layer.
+
+`RecipePreferences` describes the recommendation selector: one `dietStyle` (or
+`any`) and zero or more `freeFrom` preferences. It is visitor selection state,
+separate from the generated recipe's multi-select `dietaryTags`. Every selected
+tag must match; `any` omits only the diet-style condition. This package provides
+types only; selection handling, query construction and recommendation-summary
+fallback belong to consumer apps.

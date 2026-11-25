@@ -2,8 +2,9 @@
 
 Independent Payload CMS with PostgreSQL, a Next.js admin interface at `/admin`,
 and a REST API at `/api`. `/` redirects to `/admin`. All CMS users are trusted
-administrators. Recipes and page copy have schemas but no seeded content.
-Consumer applications and visitor-submission storage are deferred.
+administrators. A fresh content database receives two published recipes and the
+Small Bites page copy from Figma. Consumer applications and visitor-submission
+storage are deferred.
 
 ## Requirements
 
@@ -99,7 +100,8 @@ Payload synchronizes the development schema automatically. Open
 <http://localhost:3000/admin> and create the first administrator using your own
 email and password. Payload's first-user flow handles this bootstrap; subsequent
 user creation, reading, editing, deletion and unlocking require authentication.
-No administrator credentials or content are seeded.
+Administrator credentials are never seeded. The editorial content seed runs on
+Payload initialization as described below.
 
 The Users API is private. Published recipes and page Globals can be read publicly;
 writes, draft previews and version history require a CMS administrator. The REST
@@ -121,15 +123,101 @@ submitted contact messages belong in a separate application database shared by
 the future consumer apps. The CMS stores only the labels and messages used by
 those forms. Administrator accounts and Payload's internal tables stay in the CMS.
 
+### Initial content seed
+
+`src/seed/content.ts` contains typed content from the
+[Small Bites Figma design](https://www.figma.com/design/9q9fA5yK1ENwY4yCMYW4sT/small-bites?node-id=1-394):
+
+- Two published recipes, with slugs `tomato-pasta` and `chickpea-sandwich`.
+- All five published Globals, including the contact confirmation copy, navigation,
+  filter labels, recipe-page headings and form messages.
+- The agreed About paragraph describing the Next.js rendering comparison, replacing
+  the outdated statement that the demo has no search or comments.
+- Matching English copy for required states absent from Figma. The three extra
+  recipe previews and sample comments shown in the design are not seeded.
+
+Both recipes serve two. Numeric ingredient quantities are separate from names,
+units and notes; ingredients without specified amounts remain unquantified.
+The chickpea sandwich is tagged vegetarian. The pasta remains unclassified until
+its Parmesan is checked. No vegan or free-from claims are inferred.
+
+The seed runs automatically during every Payload process initialization in
+development and production. Next.js may initialize Payload lazily on the first CMS
+request rather than when `next start` prints Ready. It does not run during builds,
+migrations, type generation or import-map generation. An explicit command invokes
+the same function without recursively running the startup hook:
+
+```sh
+pnpm cms:seed
+```
+
+The function uses one PostgreSQL transaction and a transaction-scoped advisory
+lock. After acquiring the lock, it checks the private `payload-kv` completion key
+`small-bites:initial-content:v1`. If that key exists, it returns without writing.
+Otherwise it checks the recipe collection and all five Globals, including saved
+drafts/version history. If any editorial content exists, the entire seed is
+skipped. Existing administrator accounts, preferences and other internal records
+do not prevent seeding an otherwise empty content database.
+
+Only when every editorial model is empty does it create the full dataset and
+completion marker in the same transaction. Concurrent initializations cannot seed
+twice. Errors roll back the seed's content, versions and marker and fail
+initialization with an error; the next initialization can retry. Normal startup
+and `cms:seed` never merge or overwrite existing content. Deleting a seeded recipe
+does not recreate it on restart, because the completion marker remains. A fresh
+start means a new or deliberately reset database, not a process restart.
+
+The existing database schema is sufficient; no seed migration is needed. Apply
+schema migrations before the first production initialization. To seed explicitly
+in a production environment, provide the normal production environment variables,
+including `NODE_ENV=production`, and run `pnpm cms:seed` after migrations.
+
+The source objects omit creation/update/publication timestamps so Payload records
+the real initialization time. Counts remain templates for consumers to calculate
+from the two recipes; sample Figma counts and rendered timestamps are not stored.
+No administrator, visitor comment, contact submission or application database is
+created by the seed. Changing the seed file later never updates existing content
+automatically; edit it through the CMS or explicitly reset the demo content.
+
+### Reset demo content
+
+For a disposable demo, edit `src/seed/content.ts` and then run from the repository
+root:
+
+```sh
+pnpm cms:reset-content
+```
+
+This command permanently deletes **all recipes and all five page Globals**, their
+drafts/version history, related content locks and the initial-seed marker. It then
+recreates two published recipes, the five published Globals and a fresh marker
+from the current seed file. IDs and timestamps are regenerated; existing content
+edits and history are discarded.
+
+Administrator accounts, login sessions, preferences, migration history, unrelated
+key/value records and the database schema are preserved. The command targets the
+database configured in `apps/cms/.env` or the supplied environment. Apply schema
+migrations first; the reset CLI disables development schema synchronization.
+
+Deletion and reseeding use one transaction and the same advisory lock as normal
+seeding. If reseeding fails, deletion is rolled back and existing content remains.
+The command is explicit-only: normal startup and `pnpm cms:seed` still preserve
+content, and no reset endpoint is exposed.
+
+Seed-copy changes do not need a content migration when using this demo-reset
+workflow. Schema changes still need migrations and regenerated shared types.
+
 ### Recipes
 
 The `recipes` collection includes:
 
-- `title`, stable unique `slug`, listing `summary` and article `introduction`.
+- `title`, stable unique `slug`, listing `summary`, optional shorter
+  `recommendationSummary`, and article `introduction`. Recommendation cards use
+  `recommendationSummary` when non-blank, falling back to `summary`.
 - `mealType`: one of `breakfast`, `brunch`, `lunch`, `dinner` or `snack`.
   `dietaryTags`: any applicable combination of `vegetarian`, `non-vegetarian`,
   `vegan`, `pescatarian`, `dairy-free` and `gluten-free`. Tags are explicitly
-  assigned by the editor, not inferred from missing tags. The Everything filter
+  assigned by the editor, not inferred from missing tags. The Any filter
   is not a stored dietary tag. Corresponding visitor-facing labels live in the
   homepage filter/recommendation groups and recipe-page metadata.
 - Positive `cookingMinutes` and a positive integer `baseServings`.
@@ -165,8 +253,60 @@ a single `/` so they work across independently deployed consumer apps.
 
 Loading, empty, validation, error and success messages belong to their page or
 feature. The contact success-page introduction lives in `contact-page.confirmation`.
-There is no global text dictionary and no default Small Bites copy. All copy is
-plain text; consumers render it as text rather than interpreting it as HTML.
+There is no global text dictionary. Initial copy is provided by the fresh-database
+seed and remains editable. All copy is plain text; consumers render it as text
+rather than interpreting it as HTML.
+
+### Personalized recommendation controls
+
+`home-page.recommendations` supplies the copy for two selector groups:
+
+| Group | Options | Visitor selection |
+| --- | --- | --- |
+| Diet style | Any, Vegetarian, Vegan, Pescatarian, Non-vegetarian | Choose one |
+| Also free from | Dairy-free, Gluten-free | Choose any |
+
+The existing API keys are retained: `preferenceLabel` now contains “Diet style” and
+`everythingLabel` contains “Any”. `dietStyleHint`, `freeFromLabel` and `freeFromHint`
+provide the group hints/heading. `resultHeading` labels the recommendation card;
+`allRecipesMessage` supplies “Showing all recipes”. For a filtered result, replace
+`{preferences}` in `filteredRecipesTemplate` with the selected option labels.
+
+The recipe schema retains one multi-select `dietaryTags` field. The separate UI
+groups control visitor selection, not recipe classification. A recipe may carry
+several applicable diet styles. The shared type package exports `DietStyle`,
+`FreeFromPreference` and `RecipePreferences` for this selection state:
+
+```ts
+const preferences: RecipePreferences = {
+  dietStyle: 'vegetarian',
+  freeFrom: ['dairy-free', 'gluten-free'],
+}
+```
+
+Consumer apps require **every selected tag**. Use one AND condition per selected
+tag rather than putting all tags in a single `in` condition, which matches any:
+
+```json
+{
+  "and": [
+    { "dietaryTags": { "in": ["vegetarian"] } },
+    { "dietaryTags": { "in": ["dairy-free"] } },
+    { "dietaryTags": { "in": ["gluten-free"] } }
+  ]
+}
+```
+
+Any adds no diet-style condition, while selected free-from conditions still apply.
+Any with no free-from preferences returns all published recipes. Non-vegetarian
+matches its explicit tag; absence of a Vegetarian tag does not imply a match.
+Selection state and query construction belong to the future consumer apps.
+
+The grouped-preferences migration updates existing homepage recommendation copy
+and adds missing short blurbs to the two demo recipes through Payload, creating
+normal versions. Other page/recipe content is preserved, and unrelated draft
+edits remain unpublished. Seed content uses the new copy for fresh databases;
+the original first-seed completion marker remains unchanged.
 
 ### Copy templates
 
@@ -176,6 +316,7 @@ Consumers replace only these named placeholders with calculated values:
 | --- | --- |
 | `home-page.recipeListing.countSingularTemplate` / `countPluralTemplate` | `{count}` |
 | `home-page.recipeListing.progressTemplate` | `{shown}`, `{total}` |
+| `home-page.recommendations.filteredRecipesTemplate` | `{preferences}` |
 | `recipe-page.metadata.cookingTimeTemplate` | `{minutes}` |
 | `recipe-page.metadata.servingsTemplate` | `{servings}` |
 | `recipe-page.servings.optionTemplate` | `{servings}` |

@@ -10,6 +10,8 @@
     "typecheck:cms-types": "pnpm --filter @rendering-metrics/cms-types typecheck",
     "cms:db:start": "docker compose --env-file apps/cms/.env -f apps/cms/compose.yaml up -d --wait",
     "cms:db:stop": "docker compose --env-file apps/cms/.env -f apps/cms/compose.yaml stop",
+    "cms:seed": "pnpm --filter @rendering-metrics/cms seed",
+    "cms:reset-content": "pnpm --filter @rendering-metrics/cms reset-content",
     "cms:generate:types": "pnpm --filter @rendering-metrics/cms generate:types",
     "cms:generate:importmap": "pnpm --filter @rendering-metrics/cms generate:importmap",
     "cms:migrate": "pnpm --filter @rendering-metrics/cms migrate",

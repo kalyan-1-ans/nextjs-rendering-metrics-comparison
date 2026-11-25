@@ -42,8 +42,9 @@ Use `pnpm lint:fix` to apply automatic lint fixes.
 
 [`apps/cms`](apps/cms/README.md) is a standalone Payload CMS app backed by
 PostgreSQL. It includes administrator accounts, a recipe collection, and five
-Globals for Small Bites page content and interface copy. Schemas are configured;
-no recipes, page copy, or visitor data are seeded.
+Globals for Small Bites page content and interface copy. On a fresh content
+database, Payload seeds two published recipes and the page copy from Figma.
+Restarts preserve existing content and edits. Visitor data is not seeded.
 
 [`packages/cms-types`](packages/cms-types/README.md) provides generated content
 types shared by the CMS and future consumer apps. Collection definitions and
@@ -72,6 +73,8 @@ Useful root commands:
 | `pnpm typecheck:cms-types` | Check shared content types without Payload dependencies |
 | `pnpm cms:db:start` | Start the local Docker PostgreSQL database |
 | `pnpm cms:db:stop` | Stop the local database while retaining data |
+| `pnpm cms:seed` | Seed an empty content database; safely skip existing content |
+| `pnpm cms:reset-content` | Delete editorial content/history and recreate it from the seed; preserve administrators |
 | `pnpm cms:generate:types` | Regenerate Payload types |
 | `pnpm cms:generate:importmap` | Regenerate admin component imports |
 | `pnpm cms:migrate` | Apply committed database migrations |

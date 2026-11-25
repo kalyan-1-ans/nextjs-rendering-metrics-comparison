@@ -11,6 +11,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "seed": "payload run src/seed/run.ts",
+    "reset-content": "NODE_ENV=production payload run src/seed/reset.ts",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap",
     "migrate": "payload migrate",

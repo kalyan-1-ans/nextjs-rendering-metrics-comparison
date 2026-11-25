@@ -17,8 +17,10 @@ export const HomePage: GlobalConfig = {
     copyGroup('recommendations', [
       'heading', 'description', 'preferenceLabel', 'everythingLabel', 'vegetarianLabel',
       'nonVegetarianLabel', 'veganLabel', 'pescatarianLabel', 'dairyFreeLabel', 'glutenFreeLabel',
+      'dietStyleHint', 'freeFromLabel', 'freeFromHint', 'resultHeading',
+      'allRecipesMessage', 'filteredRecipesTemplate',
       'readRecipeLabel', 'loadingMessage', 'emptyMessage', 'errorMessage',
-    ]),
+    ], 'preferenceLabel labels the single-choice diet style group; everythingLabel labels Any. Free-from preferences allow multiple selections. filteredRecipesTemplate supports {preferences}.'),
     copyGroup('mealFilters', [
       'label', 'allLabel', 'breakfastLabel', 'brunchLabel', 'lunchLabel', 'dinnerLabel', 'snackLabel',
     ]),

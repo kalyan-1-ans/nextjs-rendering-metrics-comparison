@@ -167,10 +167,14 @@ export interface Recipe {
    */
   slug: string;
   summary: string;
+  /**
+   * Optional shorter blurb for personalized recommendations. Consumers fall back to summary when blank.
+   */
+  recommendationSummary?: string | null;
   introduction: string;
   mealType: 'breakfast' | 'brunch' | 'lunch' | 'dinner' | 'snack';
   /**
-   * Select every applicable preference. Everything is a UI filter, not a tag.
+   * Select all applicable tags. Consumers show one diet style choice and multiple free-from choices; all selected tags must match. Any applies no diet style constraint and is not stored.
    */
   dietaryTags?: ('vegetarian' | 'non-vegetarian' | 'vegan' | 'pescatarian' | 'dairy-free' | 'gluten-free')[] | null;
   cookingMinutes: number;
@@ -304,6 +308,7 @@ export interface RecipesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   summary?: T;
+  recommendationSummary?: T;
   introduction?: T;
   mealType?: T;
   dietaryTags?: T;
@@ -423,6 +428,9 @@ export interface HomePage {
     emptyMessage: string;
     errorMessage: string;
   };
+  /**
+   * preferenceLabel labels the single-choice diet style group; everythingLabel labels Any. Free-from preferences allow multiple selections. filteredRecipesTemplate supports {preferences}.
+   */
   recommendations: {
     heading: string;
     description: string;
@@ -434,6 +442,12 @@ export interface HomePage {
     pescatarianLabel: string;
     dairyFreeLabel: string;
     glutenFreeLabel: string;
+    dietStyleHint: string;
+    freeFromLabel: string;
+    freeFromHint: string;
+    resultHeading: string;
+    allRecipesMessage: string;
+    filteredRecipesTemplate: string;
     readRecipeLabel: string;
     loadingMessage: string;
     emptyMessage: string;
@@ -686,6 +700,12 @@ export interface HomePageSelect<T extends boolean = true> {
         pescatarianLabel?: T;
         dairyFreeLabel?: T;
         glutenFreeLabel?: T;
+        dietStyleHint?: T;
+        freeFromLabel?: T;
+        freeFromHint?: T;
+        resultHeading?: T;
+        allRecipesMessage?: T;
+        filteredRecipesTemplate?: T;
         readRecipeLabel?: T;
         loadingMessage?: T;
         emptyMessage?: T;
