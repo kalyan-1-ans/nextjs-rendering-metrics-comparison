@@ -1,0 +1,24 @@
+name: rendering-metrics-cms
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: rendering-metrics-cms-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: rendering_metrics_cms
+      POSTGRES_USER: cms
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in apps/cms/.env}
+    ports:
+      - '127.0.0.1:55432:5432'
+    volumes:
+      - cms-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U cms -d rendering_metrics_cms']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  cms-postgres:
+    name: rendering-metrics-cms-postgres
